@@ -32,7 +32,7 @@ for state in `ls historical_by_state`; do
     awk -F "\t" -v dcol=$dcol -v OFS="\t" '{print $1, $2, $3, $dcol}' temp.tsv |
       sed '1d' > out.tsv
     
-    hdfs dfs -appendToFile out.tsv "/ndtallant/project/water/${state}.tsv"
+    hdfs dfs -appendToFile out.tsv "/ndtallant/project/water/${state}/${state}.tsv"
   done
 done
 rm out.tsv

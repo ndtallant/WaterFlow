@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="row h-100 justify-content-center align-items-center white rounded-lg">
+      <div class="col-3"> 
+        {% include "user-form.html" %}
+      </div>
+      <div class="col-9"> 
+        {% include "results-view.html" %}
+      </div>
+    </div>
+{% endblock %}

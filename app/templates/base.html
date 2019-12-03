@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Water Flow</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="/static/css/mdb.min.css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link href="/static/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!--Main Navigation-->
+    <header>
+        <!--Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-blue fixed-top scrolling-navbar">
+          <div class="container">
+
+            <!-- Home Button with Name-->
+            <a class="navbar-brand" href="/">Water Flow</a>
+
+            <!-- Collapse button -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNavbar"
+              aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Collapsible content -->
+            <div class="collapse navbar-collapse" id="mainNavbar">
+              <!-- Links -->
+              <ul class="navbar-nav ml-auto">
+                  <li class="nav-item dropdown">
+                    <a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">
+                        Data Sources <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"></a></li>
+                        <li><a target="_blank" href="https://nicktallant.com/">NOAA Precip</a></li>
+                        <li><a target="_blank" href="https://nicktallant.com/">Water Quality</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="/about">About</a>
+                </li>
+              </ul>
+            </div>
+            <!-- Collapsible content -->
+          </div>
+        </nav>
+        <!--/.Navbar-->
+
+    </header>
+    <!--Main Navigation-->
+
+    <!--Main layout-->
+    <main class="mt-5"> <!--mask rgba-black-light"-->
+        <div id="main-container" class="container py-3 px-2">
+            <div class="container my-5 pt-5">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </main>
+    <!--Main layout-->
+
+    <!-- Footer --
+    <footer class="page-footer py-3 navbar-fixed-bottom font-small bg-dark darken-3">
+      <!-- Footer Elements --
+      <div class="container flex-center">
+        <!-- Twitter --
+        <a class="tw-ic" href="http://www.twitter.com/nick__tallant">
+          <i class="fab fa-twitter fa-lg white-text mr-md-5 mr-3 fa-2x hoverable"></i>
+        </a>
+        <!--Linkedin --
+        <a class="li-ic" href="http://www.linkedin.com/in/ndtallant">
+          <i class="fab fa-linkedin-in fa-lg white-text mr-md-5 mr-3 fa-2x hoverable"></i>
+        </a>
+        <!--GitHub--
+        <a class="pin-ic" href="http://www.github.com/ndtallant/WaterFlow">
+          <i class="fab fa-github fa-lg white-text fa-2x hoverable"></i>
+        </a>
+      </div>
+      <!-- Footer Elements --
+    </footer>
+    <!-- Footer -->
+  
+  <!-- /Start your project here-->
+
+  <!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script type="text/javascript" src="/static/js/jquery-3.4.0.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="/static/js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="/static/js/mdb.min.js"></script>
+  <!-- Line Chart for results -->
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="/static/js/line-chart.js"></script>
+</body>
+
+</html>

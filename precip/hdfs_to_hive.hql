@@ -94,3 +94,67 @@ WITH SERDEPROPERTIES (
 STORED AS TEXTFILE
   location '/ndtallant/project/precip/p2016';
 
+DROP TABLE IF EXISTS ndtallant_p2016;
+CREATE EXTERNAL TABLE ndtallant_p2016 (
+  id CHAR(11),        
+  p_date DATE,          
+  element CHAR(4),    
+  val INT,            
+  m_flag CHAR(1),        
+  q_flag CHAR(1),        
+  s_flag CHAR(1),        
+  obs_time CHAR(4)    
+)
+STORED AS ORC; 
+
+INSERT OVERWRITE TABLE ndtallant_p2016
+SELECT * FROM p2016;
+
+
+DROP TABLE IF EXISTS ndtallant_p2017;
+CREATE EXTERNAL TABLE ndtallant_p2017 (
+  id CHAR(11),        
+  p_date DATE,          
+  element CHAR(4),    
+  val INT,            
+  m_flag CHAR(1),        
+  q_flag CHAR(1),        
+  s_flag CHAR(1),        
+  obs_time CHAR(4)    
+)
+STORED AS ORC; 
+
+INSERT OVERWRITE TABLE ndtallant_p2017
+SELECT * FROM p2017;
+
+DROP TABLE IF EXISTS ndtallant_p2018;
+CREATE EXTERNAL TABLE ndtallant_p2018 (
+  id CHAR(11),        
+  p_date DATE,          
+  element CHAR(4),    
+  val INT,            
+  m_flag CHAR(1),        
+  q_flag CHAR(1),        
+  s_flag CHAR(1),        
+  obs_time CHAR(4)    
+)
+STORED AS ORC; 
+
+INSERT OVERWRITE TABLE ndtallant_p2018
+SELECT * FROM p2018;
+
+DROP TABLE IF EXISTS ndtallant_p2019;
+CREATE EXTERNAL TABLE ndtallant_p2019 (
+  id CHAR(11),        
+  p_date DATE,          
+  element CHAR(4),    
+  val INT,            
+  m_flag CHAR(1),        
+  q_flag CHAR(1),        
+  s_flag CHAR(1),        
+  obs_time CHAR(4)    
+)
+STORED AS ORC; 
+
+INSERT OVERWRITE TABLE ndtallant_p2019
+SELECT * FROM p2019;

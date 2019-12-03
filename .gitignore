@@ -1,3 +1,5 @@
 water/historical_by_state/*
 *.csv
 *.tsv
+precip/data/*
+water/use.*

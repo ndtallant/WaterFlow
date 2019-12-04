@@ -1,6 +1,7 @@
 '''Flask app.'''
 from flask import Flask, render_template, url_for, session, redirect, request
 import datetime as dt
+import math #For fun
 
 app = Flask(__name__)
 
@@ -8,21 +9,26 @@ app = Flask(__name__)
 def index():
     '''Home page of the webapp.'''
     state = request.form.get('state') or 'al'
-    print(state)
-    labels, p_data, w_data = get_data(state, period='FIX ME')
+    period = request.form.get('periodGroup') or 'week'
+    labels, p_data, w_data = get_data(state, period)
     return render_template('index.html',
+                           period=period,
                            data_labels=labels,
                            p_data=p_data,
                            w_data=w_data)
 
 def get_data(state, period):
     '''Looks up relevant data from HBase.'''
+    dates = get_dates(period)
+    p_data = list(range(len(dates)))
+    w_data = [math.sqrt(i) for i in range(len(dates))]
+    return dates, p_data, w_data
+
+def get_dates(period):
     today = dt.date.today()
-    # Past Week
-    labels = [str(dt.date.today() - dt.timedelta(i)) for i in range(7)]
-    p_data = list(range(7))
-    w_data = [i//2 for i in range(7)]
-    return labels, p_data, w_data
+    dates = {'week': 6, 'month': 27, 'year': 364}
+    return [str(today - dt.timedelta(i)) for i in range(dates[period], -1, -1)]
+
 
 @app.route('/about')
 def about():

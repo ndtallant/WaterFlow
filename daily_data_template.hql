@@ -1,9 +1,8 @@
--- Should these daily tables have all time data?
-
 DROP TABLE IF EXISTS ndtallant_daily_data_{{STATE}};
 CREATE EXTERNAL TABLE ndtallant_daily_data_{{STATE}} AS
 SELECT
   p_date,
+  weekofyear(p_date) AS p_week,
   precip,
   n_precip,
   discharge,

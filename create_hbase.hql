@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS ndtallant_serve_daily;
 CREATE EXTERNAL TABLE ndtallant_serve_daily (
   state_date STRING,
+  p_week BIGINT,
   precip BIGINT,
   n_precip BIGINT,
   discharge DOUBLE,

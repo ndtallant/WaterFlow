@@ -1,6 +1,7 @@
 INSERT INTO TABLE ndtallant_serve_daily
 SELECT 
   CONCAT('{{STATE}}-', p_date),
+  p_week,
   precip,
   n_precip,
   discharge,

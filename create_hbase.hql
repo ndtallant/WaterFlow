@@ -8,5 +8,5 @@ CREATE EXTERNAL TABLE ndtallant_serve_daily (
   n_discharge BIGINT
 )
 STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
-WITH SERDEPROPERTIES ('hbase.columns.mapping' = ':key,water:precip,water:n_precip,water:discharge,water:n_discharge')
+WITH SERDEPROPERTIES ('hbase.columns.mapping' = ':key,water:p_week,water:precip,water:n_precip,water:discharge,water:n_discharge')
 TBLPROPERTIES ('hbase.table.name' = 'ndtallant_serve_daily');

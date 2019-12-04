@@ -5,9 +5,11 @@
     <hr>
     <select class="browser-default custom-select" name="state">
       <!--option selected>Select A State</option-->
-      <option selected value="al">Alabama</option>
-      <option value="tx">Texas</option>
-      <option value="wi">Wisconsin</option>
+      {% for state in states %}
+        <option {% if user_state == state %}selected{% endif %} value="{{ state }}">
+          {{ states[state] }}
+        </option>
+      {% endfor %}
     </select>
   </div>
 

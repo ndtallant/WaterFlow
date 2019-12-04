@@ -5,7 +5,9 @@
         {% include "user-form.html" %}
       </div>
       <div class="col-9"> 
-        {% include "results-view.html" %}
+        {% with table=table %}
+            {% include "results-view.html" %}
+        {% endwith %}
       </div>
     </div>
 {% endblock %}

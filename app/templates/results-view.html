@@ -1,3 +1,7 @@
 <div class="results-view white rounded-lg">
-  <canvas id="lineChart"></canvas> 
+  {% if not table %}
+    <canvas id="lineChart"></canvas> 
+  {% else %}
+    {% include "data-table.html" %}
+  {% endif %}
 </div>

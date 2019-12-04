@@ -1,7 +1,7 @@
 <div class="user-form"> 
-  
+  <form action="{{ url_for('index') }}" method="post"> 
   <div>
-    <select class="browser-default custom-select">
+    <select class="browser-default custom-select" name="state">
       <!--option selected>Select A State</option-->
       <option selected value="al">Alabama</option>
       <option value="tx">Texas</option>
@@ -32,7 +32,7 @@
   <!-- Graph / Table Switch -->
   <div class="container mt-2 pt-2">
     <div class="custom-control custom-switch">
-      <input type="checkbox" class="custom-control-input" id="customSwitches">
+      <input type="checkbox" class="custom-control-input" id="customSwitches" name="table">
       <label class="custom-control-label" for="customSwitches">Table</label>
     </div>
   </div>
@@ -40,5 +40,5 @@
   <div class="mt-2 pt-2">
     <button type="submit" class="btn btn-primary">Submit</button>
   </div>
-
+  </form>
 </div>

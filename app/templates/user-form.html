@@ -1,6 +1,8 @@
 <div class="user-form"> 
   <form action="{{ url_for('index') }}" method="post"> 
   <div>
+    <h4>State</h4>
+    <hr>
     <select class="browser-default custom-select" name="state">
       <!--option selected>Select A State</option-->
       <option selected value="al">Alabama</option>
@@ -9,7 +11,9 @@
     </select>
   </div>
 
-  <div class="container mt-2 pt-2">
+  <h4 class="mt-3 pt-2">Period</h4>
+  <hr>
+  <div class="container mt-1 pt-1">
     <!-- Group of default radios - option 1 -->
     <div class="custom-control custom-radio">
       <input type="radio" class="custom-control-input" id="defaultGroupExample1" name="groupOfDefaultRadios">
@@ -26,14 +30,6 @@
     <div class="custom-control custom-radio">
       <input type="radio" class="custom-control-input" id="defaultGroupExample3" name="groupOfDefaultRadios">
       <label class="custom-control-label" for="defaultGroupExample3">Past Year</label>
-    </div>
-  </div>
-
-  <!-- Graph / Table Switch -->
-  <div class="container mt-2 pt-2">
-    <div class="custom-control custom-switch">
-      <input type="checkbox" class="custom-control-input" id="customSwitches" name="table">
-      <label class="custom-control-label" for="customSwitches">Table</label>
     </div>
   </div>
 

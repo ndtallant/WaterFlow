@@ -9,16 +9,13 @@
     </thead>
 
     <tbody>
-      <tr>
-        <td>2019-01-01</td>
-        <td>4</td>
-        <td>2.1</td>
-      </tr>
-      <tr>
-        <td>2019-01-02</td>
-        <td>3</td>
-        <td>2.003</td>
-      </tr> 
+      {% for label in data_labels %}
+        <tr>
+          <td>{{ label }}</td>
+          <td>{{ p_data[loop.index] }}</td>
+          <td>{{ w_data[loop.index] }}</td>
+        </tr>
+      {% endfor %}
     </tbody>
   </table>
 </div>

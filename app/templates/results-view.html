@@ -7,6 +7,14 @@
           Show Table <i class="fa fa-arrow-right"></i>
         </button>
       </div>
+
+      <script>
+        // Get data from app.
+        var data_labels = {{ data_labels|safe }};
+        var p_data = {{ p_data|safe }};
+        var w_data = {{ w_data|safe }};
+      </script>
+
       <div class="carousel-item">
         {% include "data-table.html" %}
         <button type="button" class="btn btn-outline-primary" data-target="#results-carousel" data-slide-to="0" class="active">

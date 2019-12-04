@@ -1,8 +1,10 @@
 '''Flask app.'''
-from flask import Flask, render_template, url_for, session, redirect, request
 import json
 import datetime as dt
-import math #For fun
+from flask import Flask, render_template, request
+from credentials import zookeeperHosts, zookeeperRoot, kafkaHost
+
+import math #For fun 
 
 app = Flask(__name__)
 
@@ -45,4 +47,4 @@ def about():
     return render_template('about.html')
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", port=3042, debug=True)

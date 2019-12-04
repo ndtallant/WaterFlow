@@ -3,3 +3,4 @@ water/historical_by_state/*
 *.tsv
 precip/data/*
 water/use.*
+app/credentials.py

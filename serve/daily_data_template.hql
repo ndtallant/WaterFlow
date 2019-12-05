@@ -3,7 +3,7 @@ CREATE EXTERNAL TABLE ndtallant_daily_data_{{STATE}} AS
 SELECT
   p_date,
   weekofyear(p_date) AS p_week,
-  month(p_date) AS p_month,
+  date_format(p_date, 'MMM') AS p_month,
   year(p_date) AS p_year,
   precip,
   n_precip,

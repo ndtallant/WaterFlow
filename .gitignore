@@ -4,3 +4,4 @@ water/historical_by_state/*
 precip/data/*
 water/use.*
 app/credentials.py
+*/__pycache__/*

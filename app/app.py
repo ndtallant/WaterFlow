@@ -71,7 +71,7 @@ def date_helper(this_month, this_year, i):
     rv = this_month - i
     if rv < 1:
         return str(rv + 12) + str(this_year - 1)
-    return str(rv) + str(this_year)
+    return '{}-{}'.format(calendar.month_abbr[rv], this_year)
 
 @app.route('/about')
 def about():

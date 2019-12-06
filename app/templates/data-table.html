@@ -12,8 +12,8 @@
       {% for label in data_labels %}
         <tr>
           <td>{{ label }}</td>
-          <td>{{ p_data[loop.index] }}</td>
-          <td>{{ w_data[loop.index] }}</td>
+          <td>{{ p_data[loop.index - 1] }}</td>
+          <td>{{ w_data[loop.index - 1] }}</td>
         </tr>
       {% endfor %}
     </tbody>

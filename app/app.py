@@ -6,7 +6,7 @@ import datetime as dt
 from collections import OrderedDict
 from flask import Flask, render_template, request
 from credentials import zookeeperHost, zookeeperRoot, kafkaHost
-import math #For fun 
+from thriftpy2.transport import TTransportException
 
 app = Flask(__name__)
 hbase = happybase.Connection(
@@ -19,21 +19,26 @@ hbase = happybase.Connection(
 def index():
     '''Home page of the webapp.'''
 
-    # Form information
-    state = request.form.get('state') or 'al'
-    period = request.form.get('periodGroup') or 'week'
-    with open("static/states.json", "r") as f:
-        states = json.loads(f.read(), object_pairs_hook=OrderedDict)
-    
-    # Actual data
-    labels, p_data, w_data = get_data(state, period)
-    return render_template('index.html',
-                           user_state=state,
-                           period=period,
-                           data_labels=labels,
-                           p_data=p_data,
-                           w_data=w_data,
-                           states=states)
+    try:
+        # Form information
+        state = request.form.get('state') or 'al'
+        period = request.form.get('periodGroup') or 'week'
+        with open("static/states.json", "r") as f:
+            states = json.loads(f.read(), object_pairs_hook=OrderedDict)
+        
+        # Actual data
+        labels, p_data, w_data = get_data(state, period)
+        return render_template('index.html',
+                               user_state=state,
+                               period=period,
+                               data_labels=labels,
+                               p_data=p_data,
+                               w_data=w_data,
+                               states=states)
+    except BrokenPipeError:
+        return render_template('error.html')
+    except TTransportException:
+        return render_template('error.html')
 
 def get_data(state, period):
     '''Looks up relevant data from HBase.'''
@@ -60,7 +65,7 @@ def get_dates(period):
 
     if period == 'month': 
         this_week = today.isocalendar()[1]
-        return 'weekly', [str(this_week - i)+str(today.year) for i in range(5, -1, -1)]
+        return 'weekly', ['{}-{}'.format(this_week - i, today.year) for i in range(5, -1, -1)]
 
     # Past year
     if period == 'year':

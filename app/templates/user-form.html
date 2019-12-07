@@ -45,6 +45,16 @@
              {% endif %}>
       <label class="custom-control-label" for="past_year">Past Year</label>
     </div>
+
+    <!-- Past 3 Years --> 
+    <div class="custom-control custom-radio">
+      <input type="radio" class="custom-control-input"
+             id="past_three" name="periodGroup" value="three_year"
+             {% if period == "three_year" %} 
+               checked 
+             {% endif %}>
+      <label class="custom-control-label" for="past_three">Past Three Years</label>
+    </div>
   </div>
 
   <div class="mt-2 pt-2">

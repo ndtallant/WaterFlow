@@ -74,6 +74,14 @@ def get_labels(period):
     if period == 'year':
         return 'monthly', [date_helper(today.month, today.year, i)\
                            for i in range(11, -1, -1)] 
+    # Past three years
+    if period == 'three_year':
+        return 'monthly', [new_date_helper(today, i)\
+                           for i in range(35, -1, -1)] 
+
+def new_date_helper(today, i):
+    older_date = today - dt.timedelta(weeks=4*i)
+    return '{}-{}'.format(calendar.month_abbr[older_date.month], older_date.year) 
 
 def date_helper(this_month, this_year, i):
     rv = this_month - i

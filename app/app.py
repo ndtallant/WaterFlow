@@ -4,9 +4,10 @@ import calendar
 import happybase
 import datetime as dt
 from collections import OrderedDict
+from dateutil.relativedelta import relativedelta
 from flask import Flask, render_template, request
-from credentials import zookeeperHost, zookeeperRoot, kafkaHost
 from thriftpy2.transport import TTransportException
+from credentials import zookeeperHost, zookeeperRoot, kafkaHost
 
 app = Flask(__name__)
 
@@ -62,7 +63,6 @@ def parse_data(data):
 def get_labels(period):
     today = dt.date.today()
 
-    # Past week
     if period == 'week': 
         return 'daily', [str(today - dt.timedelta(i)) for i in range(6, -1, -1)]
 
@@ -70,24 +70,13 @@ def get_labels(period):
         this_week = today.isocalendar()[1]
         return 'weekly', ['{}-{}'.format(this_week - i, today.year) for i in range(5, -1, -1)]
 
-    # Past year
-    if period == 'year':
-        return 'monthly', [date_helper(today.month, today.year, i)\
-                           for i in range(11, -1, -1)] 
-    # Past three years
-    if period == 'three_year':
-        return 'monthly', [new_date_helper(today, i)\
-                           for i in range(35, -1, -1)] 
+    # Past year or three years
+    m = 11 if period == 'year' else 35
+    return 'monthly', [year_helper(today, i) for i in range(m, -1, -1)]
 
-def new_date_helper(today, i):
-    older_date = today - dt.timedelta(weeks=4*i)
+def year_helper(today, i):
+    older_date = today - relativedelta(months=i)
     return '{}-{}'.format(calendar.month_abbr[older_date.month], older_date.year) 
-
-def date_helper(this_month, this_year, i):
-    rv = this_month - i
-    if rv < 1:
-        return str(rv + 12) + str(this_year - 1)
-    return '{}-{}'.format(calendar.month_abbr[rv], this_year)
 
 @app.route('/about')
 def about():

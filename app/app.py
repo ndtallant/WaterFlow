@@ -36,8 +36,10 @@ def index():
                                w_data=w_data,
                                states=states)
     except BrokenPipeError:
+        print('Broken pipe!')
         return render_template('error.html')
     except TTransportException:
+        print('Thrift server may be down!')
         return render_template('error.html')
 
 def get_data(state, period):

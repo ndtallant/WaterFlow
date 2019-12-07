@@ -9,11 +9,6 @@ from credentials import zookeeperHost, zookeeperRoot, kafkaHost
 from thriftpy2.transport import TTransportException
 
 app = Flask(__name__)
-hbase = happybase.Connection(
-    host=zookeeperHost,
-    port=9090,
-    table_prefix='ndtallant_serve'
-)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -44,11 +39,17 @@ def index():
 
 def get_data(state, period):
     '''Looks up relevant data from HBase.'''
-    table_name, dates = get_dates(period)
+    table_name, labels = get_labels(period)
+    hbase = happybase.Connection(
+        host=zookeeperHost,
+        port=9090,
+        table_prefix='ndtallant_serve'
+    )
     table = hbase.table(table_name)
-    data = table.rows(['{}-{}'.format(state, date) for date in dates])
+    data = table.rows(['{}-{}'.format(state, label) for label in labels])
+    hbase.close()
     p_data, w_data = parse_data(data)
-    return dates, p_data, w_data
+    return labels, p_data, w_data
 
 def parse_data(data):
     '''Given hbase data, returns averages.'''
@@ -58,7 +59,7 @@ def parse_data(data):
         w_data.append(float(d[b'water:discharge']) / float(d[b'water:n_discharge']))
     return p_data, w_data 
 
-def get_dates(period):
+def get_labels(period):
     today = dt.date.today()
 
     # Past week

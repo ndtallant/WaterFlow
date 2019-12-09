@@ -46,11 +46,33 @@ def get_data(state, period):
         port=9090,
         table_prefix='ndtallant_serve'
     )
-    table = hbase.table(table_name)
-    data = table.rows(['{}-{}'.format(state, label) for label in labels])
-    hbase.close()
-    p_data, w_data = parse_data(data)
-    return labels, p_data, w_data
+    try:
+        table = hbase.table(table_name)
+        data = table.rows(['{}-{}'.format(state, label) for label in labels])
+        data = combine_with_speed(state, data, labels)
+        p_data, w_data = parse_data(data)
+        return labels, p_data, w_data
+    finally:
+        hbase.close()
+
+def combine_with_speed(state, data):
+    '''Combines speed and serve layer data.'''
+    speed = happybase.Connection(host=zookeeperHost, port=9090)
+    try:
+        # Most recent data from speed layer
+        table = speed.table('ndtallant_speed') 
+        todays_data = table.row(state)
+        todays_n = float(todays_data[b'water:n_discharge'])
+        todays_discharge = float(todays_data[b'water:discharge'])
+
+        # Combine that data with the most recent data. 
+        rv_label, rv_data = data[-1]
+        rv_data[b'water:n_discharge'] = float(rv_data[b'water:n_discharge']) + todays_n
+        rv_data[b'water:discharge'] = float(rv_data[b'water:discharge']) + todays_discharge
+        data[-1] = (rv_label, rv_data)
+    finally:
+        speed.close()
+        return data
 
 def parse_data(data):
     '''Given hbase data, returns averages.'''

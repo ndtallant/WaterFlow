@@ -56,4 +56,5 @@ SELECT
   csv.val
 FROM ndtallant_station_to_state AS sts
 JOIN ndtallant_precipitation_csv AS csv
-  ON sts.station = csv.id;
+  ON sts.station = csv.id
+WHERE val != -9999;

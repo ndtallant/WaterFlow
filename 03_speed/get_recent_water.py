@@ -8,6 +8,9 @@ This script takes about a minute to run.
 import requests
 import happybase
 from credentials import zookeeperHost
+from apscheduler.schedulers.blocking import BlockingScheduler
+
+sched = BlockingScheduler()
 
 def parse_station(station):
     try:
@@ -24,8 +27,9 @@ def get_state(state='al'):
     return {'water:discharge': str(sum(map(parse_station, stations))),
             'water:n_discharge': str(len(stations))}
 
-
-if __name__ == '__main__':
+@sched.scheduled_job('interval', minutes=60)
+def create_speed_table():
+    '''Refreshes the speed table every hour.'''
     with open('../01_batch/water/states.txt', 'r') as f:
         states = f.read().split('\n')[:-1]
 
@@ -53,3 +57,6 @@ if __name__ == '__main__':
     except:
         print('Cannot connect to HBase')
 
+if __name__ == '__main__':
+    sched.configure()
+    sched.start()

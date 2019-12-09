@@ -3,6 +3,8 @@ This application is a dashboard to examine USGS water station discharge and NOAA
 It follows the popular [Lambda Architecture](https://databricks.com/glossary/lambda-architecture) to handle the sheer volume
 of data and to scale continuously without mitigating performance.
 
+![Application Demo](.demo.gif)
+
 ### Data Sources
 * Daily Pecipitation Summaries From NOAA's [National Centers for Environmental Information](https://www.ncdc.noaa.gov/)
 * USGS [Water Services API](https://waterservices.usgs.gov/)

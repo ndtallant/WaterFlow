@@ -31,3 +31,17 @@ Actual data collection occurs by:
 * `01_collect_raw_stations_by_state.sh`: This file collects a random sample of stations for each state as a text file to preserve shared resources. It can be modified to collect all available water data across the United States.
 * `02_clean_stations.sh`: This file removes data comments, identifies the discharge column, and appends to files in HDFS (/ndtallant/project/water/{state}.tsv)
 * `03_hdfs_to_hive.sh`: This file stores data as ORC Hive tables following the naming convention `ndtallant_{state}`. It utilizes `hdfs_to_hive_template.hql`.
+
+### Serve Layer
+This portion of the application computes and stores relevant data to be quickly accessed by the web application, specifically daily, weekly, and monthly aggregations of both precipitation and water data by state.
+These are stored in the [HBase](https://hbase.apache.org/) tables `ndtallant_serve_daily`, `ndtallant_serve_weekly`, and `ndtallant_serve_monthly`, respectively.
+Each table's key follows the naming convention of `STATE-DATE`, where state is the two character state abbreviation and date is:
+* `YYYY-MM-DD` for daily data.
+* `NN-YYYY`, for weekly data, where `NN` is the number of the week of that year.
+* `ABR-YYYY` for monthly data, where `ABR` is the abbreviation of that month, such as Jan.
+
+Files used to accomplish this task are:
+* `01_daily_data.sh`: Aggregates state level data by day `YYYY-MM-DD` using `daily_data_template.hql`.
+* `02_serve_to_hbase.sh`: Computes the weekly and monthly aggregations and stores all serve layer data in Hbase using `create_hbase.hql` and `hbase_template.hql`.
+* `UPDATE ME`DeleteTable.java
+

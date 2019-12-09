@@ -49,7 +49,7 @@ def get_data(state, period):
     try:
         table = hbase.table(table_name)
         data = table.rows(['{}-{}'.format(state, label) for label in labels])
-        data = combine_with_speed(state, data, labels)
+        data = combine_with_speed(state, data)
         p_data, w_data = parse_data(data)
         return labels, p_data, w_data
     finally:

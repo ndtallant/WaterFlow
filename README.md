@@ -1,6 +1,10 @@
 # Water Flow 
 An at scale exploration of precipitation and water station discharge.
 
+### Data Sources
+* Daily Pecipitation Summaries From NOAA's [National Centers for Environmental Information](https://www.ncdc.noaa.gov/)
+* USGS [Water Services API](https://waterservices.usgs.gov/)
+
 ## Water
 0. Get some basic information.
   - `get_station_meta.py`: Get meta info for all stations
@@ -12,7 +16,6 @@ An at scale exploration of precipitation and water station discharge.
                       to files in HDFS (/ndtallant/project/water/{state}.tsv)
 
 ## Precipitation
-
 0. Information
 - `format_precip.txt`
 - `ghcnd-states.txt`

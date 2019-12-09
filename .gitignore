@@ -1,7 +1,7 @@
-water/historical_by_state/*
+01_batch/water/historical_by_state/*
 *.csv
 *.tsv
-precip/data/*
-water/use.*
+01_batch/precip/data/*
+01_batch/water/use.*
 */credentials.py
 */__pycache__/*

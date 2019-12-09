@@ -45,3 +45,6 @@ Files used to accomplish this task are:
 * `02_serve_to_hbase.sh`: Computes the weekly and monthly aggregations and stores all serve layer data in Hbase using `create_hbase.hql` and `hbase_template.hql`.
 * `UPDATE ME`DeleteTable.java
 
+### Speed Layer
+This portion of the application collects the most recent water data, aggregates it, and stores it in the HBase table `ndtallant_speed` using `get_recent_water.py`. 
+The resulting table has a row for each state, where the key is the state and the columns are `discharge` and `n_discharge`. It is set to run hourly.

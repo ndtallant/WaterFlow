@@ -4,7 +4,10 @@ HBase to be combined with Serve Layer data.
 
 This script takes about a minute to run.
 '''
+# TODO: Add Scheduling and Logging
 import requests
+import happybase
+from credentials import zookeeperHost
 
 def parse_station(station):
     try:
@@ -18,20 +21,35 @@ def get_state(state='al'):
         'stateCd={}&parameterCd=00060&siteStatus=active'.format(state)
     )
     stations = resp.json()['value']['timeSeries']
-    return sum(map(parse_station, stations)), len(stations)
+    return {'water:discharge': str(sum(map(parse_station, stations))),
+            'water:n_discharge': str(len(stations))}
 
 
 if __name__ == '__main__':
     with open('../01_batch/water/states.txt', 'r') as f:
         states = f.read().split('\n')[:-1]
 
-    for state in states:
-        print(state, get_state(state))
+    try:
+        hbase = happybase.Connection(
+            host=zookeeperHost,
+            port=9090,
+            table_prefix='ndtallant'
+        )
+        # Connect to HBase, disable, drop, and recreate table.
+        try:
+            hbase.delete_table('speed', disable=True)
+            hbase.create_table('speed', families={'water': dict()})
+            table = hbase.table('speed')
+            batch = table.batch()
+            for state in states:
+                batch.put(state, get_state(state))
+                print('Speed data created for', state)
+            batch.send()
+            print('All speed data loaded.')
+        except Exception as e:
+            print('Error on speed insert', e)
+        finally:
+            hbase.close()
+    except:
+        print('Cannot connect to HBase')
 
-    # HBase Table where key is simply state, it can then be combined
-    # with any of the serve tables, as these are just counts!
-
-    #TODO:
-    # Connect to HBase table
-    # Remove existing HBase data.
-    # Add new data to table.

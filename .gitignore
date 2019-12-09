@@ -4,4 +4,5 @@
 01_batch/precip/data/*
 01_batch/water/use.*
 */credentials.py
+*/credentials.pyc
 */__pycache__/*

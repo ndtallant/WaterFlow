@@ -1,4 +1,78 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Hello, About!</h1>
+<h1>About</h1>
+<p>
+  This application is a dashboard to examine USGS water station discharge and NOAA precipitation for the entire United States.
+  It follows the popular <a href="https://databricks.com/glossary/lambda-architecture">Lambda Architecture</a>
+  to handle the sheer volume of data and to scale continuously without mitigating performance.
+</p>
+
+
+<h3>Data Sources</h3>
+<ul>
+  <li> Daily Pecipitation Summaries From NOAA's <a href="https://www.ncdc.noaa.gov/">National Centers for Environmental Information</a></li>
+  <li> USGS <a href="https://waterservices.usgs.gov/">Water Services API</a></li>
+</ul>
+
+<h3>Batch Layer</h3>
+<p>
+  As the source of ground truth, this portion of the application is responsible for collecting and storing minimally processed data.
+  This is accomplished the same way for both precipitation and water data:
+</p>
+
+<ol>
+  <li> Collect raw text data from sources.</li>
+  <li> Conduct light processing to ensure valid data with a consistent schema.</li>
+  <li> Store in HDFS.</li>
+  <li> Store in Hive as [Optimized Row Columnar](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+ORC) files.</li>
+</ol>
+
+<h4>Precipitation</h4>
+<ul>
+  <li> `readme.txt`: Data documentation provided by NOAA.</li>
+  <li> `run.sh`: This file is all that needs to be run. It extracts, transforms, and loads all precipitation data.</li>
+  <li> `get_precip.sh`: Called by `run.sh`, this file collects raw data from NOAA and stores is in HDFS.</li>
+  <li> `hdfs_to_hive.hql`: Called by `run.sh`, this file stores data as the ORC Hive table `ndtallant_precipitation`.</li>
+</ul>
+
+<h4>Water</h4>
+<p>
+  Baseline information needed to be collected before the actual data. This is handled by:
+  <ul>
+    <li> `get_station_meta.py`: Collects all metadata for water stations by state and stores it in `station_meta/`.</li>
+    <li> `states.txt`: All of the states in the US.</li>
+  </ul>
+
+  Actual data collection occurs by:
+  <ul>
+    <li> `01_collect_raw_stations_by_state.sh`: This file collects a random sample of stations for each state as a text file to preserve shared resources. It can be modified to collect all available water data across the United States.</li>
+    <li> `02_clean_stations.sh`: This file removes data comments, identifies the discharge column, and appends to files in HDFS (/ndtallant/project/water/{state}.tsv)</li>
+    <li> `03_hdfs_to_hive.sh`: This file stores data as ORC Hive tables following the naming convention `ndtallant_{state}`. It utilizes `hdfs_to_hive_template.hql`.</li>
+  </ul>
+</p>
+
+<h3>Serve Layer</h3>
+<p>
+  This portion of the application computes and stores relevant data to be quickly accessed by the web application, specifically daily, weekly, and monthly aggregations of both precipitation and water data by state.
+  These are stored in the [HBase](https://hbase.apache.org/) tables `ndtallant_serve_daily`, `ndtallant_serve_weekly`, and `ndtallant_serve_monthly`, respectively.
+  Each table's key follows the naming convention of `STATE-DATE`, where state is the two character state abbreviation and date is:
+  <ul>
+    <li> `YYYY-MM-DD` for daily data.</li>
+    <li> `NN-YYYY`, for weekly data, where `NN` is the number of the week of that year.</li>
+    <li> `ABR-YYYY` for monthly data, where `ABR` is the abbreviation of that month, such as Jan.</li>
+  </ul>
+
+  Files used to accomplish this task are:
+  <ul>
+    <li> `01_daily_data.sh`: Aggregates state level data by day `YYYY-MM-DD` using `daily_data_template.hql`.</li>
+    <li> `02_serve_to_hbase.sh`: Computes the weekly and monthly aggregations and stores all serve layer data in Hbase using `create_hbase.hql` and `hbase_template.hql`.</li>
+    <li> `UPDATE ME`DeleteTable.java</li>
+  </ul>
+</p>
+
+<h3>Speed Layer</h3>
+<p>
+  This portion of the application collects the most recent water data, aggregates it, and stores it in the HBase table `ndtallant_speed` using `get_recent_water.py`. 
+  The resulting table has a row for each state, where the key is the state and the columns are `discharge` and `n_discharge`. It is set to run hourly.
+</p>
 {% endblock %}

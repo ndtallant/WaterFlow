@@ -5,6 +5,15 @@ of data and to scale continuously without mitigating performance.
 
 ![Application Demo](.demo.gif)
 
+### Setup and Use
+0. Install python dependencies (virtual environment recommended) with `pip install -r requirements.txt`.
+1. Copy `credentials.template` into `app` and `03_speed` as `credentials.py` with credentials.
+2. Create the batch layer with `01_batch/run.sh` or run daily with `cron`.
+3. Create the serve layer with `02_serve/run.sh` or run daily with `cron`.
+4. Create the speed layer with `python 03_speed/get_recent_water.py`. It runs hourly by default.
+5. Start the web application `python app/app.py`.
+6. Use the appication at `http://34.66.189.234:3042/`. (Note, this url will not be live past 2019).
+
 ### Data Sources
 * Daily Pecipitation Summaries From NOAA's [National Centers for Environmental Information](https://www.ncdc.noaa.gov/)
 * USGS [Water Services API](https://waterservices.usgs.gov/)

@@ -7,7 +7,7 @@ from collections import OrderedDict
 from dateutil.relativedelta import relativedelta
 from flask import Flask, render_template, request
 from thriftpy2.transport import TTransportException
-from credentials import zookeeperHost, zookeeperRoot, kafkaHost
+from credentials import zookeeperHost
 
 app = Flask(__name__)
 

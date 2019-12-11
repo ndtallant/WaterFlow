@@ -4,13 +4,16 @@ HBase to be combined with Serve Layer data.
 
 This script takes about a minute to run.
 '''
-# TODO: Add Scheduling and Logging
+import logging
 import requests
 import happybase
 from credentials import zookeeperHost
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 sched = BlockingScheduler()
+logging.basicConfig(filename='speed.log',
+                    filemode='w',
+                    format='%(asctime)s - %(message)s')
 
 def parse_station(station):
     try:
@@ -30,6 +33,9 @@ def get_state(state='al'):
 @sched.scheduled_job('interval', minutes=60)
 def create_speed_table():
     '''Refreshes the speed table every hour.'''
+
+    logging.info('Starting speed layer refresh.')
+
     with open('../01_batch/water/states.txt', 'r') as f:
         states = f.read().split('\n')[:-1]
 
@@ -47,15 +53,15 @@ def create_speed_table():
             batch = table.batch()
             for state in states:
                 batch.put(state, get_state(state))
-                print('Speed data created for', state)
+                logging.info('Speed data created for {}'.format(state))
             batch.send()
-            print('All speed data loaded.')
+            logging.info('All speed data loaded.')
         except Exception as e:
-            print('Error on speed insert', e)
+            logging.info('Error on speed insert', e)
         finally:
             hbase.close()
     except:
-        print('Cannot connect to HBase')
+        logging.info('Cannot connect to HBase')
 
 if __name__ == '__main__':
     sched.configure()

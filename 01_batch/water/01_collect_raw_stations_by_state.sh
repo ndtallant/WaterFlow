@@ -13,8 +13,9 @@ do
 
   for station in `cat historical_by_state/${state}/station_list.txt`;
   do
-    echo $station
+    echo `date` -- "Collecting ${station}" >> ../batch.log
     curl "https://waterservices.usgs.gov/nwis/dv/?format=rdb&sites=${station}&startDT=2016-01-01&parameterCd=00060&siteStatus=all" -o "historical_by_state/${state}/${station}.txt"
   done
+  echo `date` -- "Finished collecting raw data for ${state}"
 done
 

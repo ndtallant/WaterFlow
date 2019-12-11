@@ -17,8 +17,8 @@ for state in `ls historical_by_state`; do
     station=`echo "${f}" | cut -d . -f 1`
 
     # Make a temp file of just data.
-    echo "Cleaning station # ${station}"
-      sed '/^#/d' "historical_by_state/${state}/${f}" |
+    echo `date` -- "Cleaning station # ${station}" >> ../batch.log
+    sed '/^#/d' "historical_by_state/${state}/${f}" |
       sed '2d' |
       sed 's/[0-9]\+_00060_[0-9]\+/discharge/' > temp.tsv 
 

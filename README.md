@@ -8,11 +8,17 @@ of data and to scale continuously without mitigating performance.
 ### Setup and Use
 0. Install python dependencies (virtual environment recommended) with `pip install -r requirements.txt`.
 1. Copy `credentials.template` into `app` and `03_speed` as `credentials.py` with credentials.
-2. Create the batch layer with `01_batch/run.sh` or run daily with `cron`.
-3. Create the serve layer with `02_serve/run.sh` or run daily with `cron`.
-4. Create the speed layer with `python 03_speed/get_recent_water.py`. It runs hourly by default.
-5. Start the web application `python app/app.py`.
-6. Use the appication at `http://34.66.189.234:3042/`. (Note, this url will not be live past 2019).
+2. Create the batch data for water with `01_batch/water/run.sh` or run daily with `cron`.
+3. Create the batch data for precipitation with `01_batch/precip/run.sh` or run daily with `cron`.
+4. Create the serve layer with `02_serve/run.sh` or run daily with `cron`.
+5. Create the speed layer with `python 03_speed/get_recent_water.py`. It runs hourly by default.
+6. Start the web application `python app/app.py`.
+7. Use the appication at `http://34.66.189.234:3042/`. (Note, this url will not be live past 2019).
+
+As the different layers are running, you can check the log files in each directory:
+* `01_batch/batch.log`
+* `02_serve/serve.log`
+* `03_speed/speed.log`
 
 ### Data Sources
 * Daily Pecipitation Summaries From NOAA's [National Centers for Environmental Information](https://www.ncdc.noaa.gov/)
@@ -38,7 +44,7 @@ Baseline information needed to be collected before the actual data. This is hand
 * `get_station_meta.py`: Collects all metadata for water stations by state and stores it in `station_meta/`.
 * `states.txt`: All of the states in the US.
 
-Actual data collection occurs by:
+Actual data collection occurs by these files called by `run.sh`:
 * `01_collect_raw_stations_by_state.sh`: This file collects a random sample of stations for each state as a text file to preserve shared resources. It can be modified to collect all available water data across the United States.
 * `02_clean_stations.sh`: This file removes data comments, identifies the discharge column, and appends to files in HDFS (/ndtallant/project/water/{state}.tsv)
 * `03_hdfs_to_hive.sh`: This file stores data as ORC Hive tables following the naming convention `ndtallant_{state}`. It utilizes `hdfs_to_hive_template.hql`.
@@ -54,7 +60,6 @@ Each table's key follows the naming convention of `STATE-DATE`, where state is t
 Files used to accomplish this task are:
 * `01_daily_data.sh`: Aggregates state level data by day `YYYY-MM-DD` using `daily_data_template.hql`.
 * `02_serve_to_hbase.sh`: Computes the weekly and monthly aggregations and stores all serve layer data in Hbase using `create_hbase.hql` and `hbase_template.hql`.
-* `UPDATE ME`DeleteTable.java
 
 ### Speed Layer
 This portion of the application collects the most recent water data, aggregates it, and stores it in the HBase table `ndtallant_speed` using `get_recent_water.py`. 

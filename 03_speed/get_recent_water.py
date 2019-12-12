@@ -13,6 +13,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 sched = BlockingScheduler()
 logging.basicConfig(filename='speed.log',
                     filemode='w',
+                    level='INFO',
                     format='%(asctime)s - %(message)s')
 
 def parse_station(station):
@@ -30,10 +31,9 @@ def get_state(state='al'):
     return {'water:discharge': str(sum(map(parse_station, stations))),
             'water:n_discharge': str(len(stations))}
 
-@sched.scheduled_job('interval', minutes=60)
+@sched.scheduled_job('interval', minutes=2)
 def create_speed_table():
     '''Refreshes the speed table every hour.'''
-
     logging.info('Starting speed layer refresh.')
 
     with open('../01_batch/water/states.txt', 'r') as f:
@@ -50,6 +50,7 @@ def create_speed_table():
             hbase.delete_table('speed', disable=True)
             hbase.create_table('speed', families={'water': dict()})
             table = hbase.table('speed')
+            logging.info('Speed table refreshed.')
             batch = table.batch()
             for state in states:
                 batch.put(state, get_state(state))
@@ -60,9 +61,12 @@ def create_speed_table():
             logging.info('Error on speed insert', e)
         finally:
             hbase.close()
+            logging.info('Closed Hbase Connection')
     except:
         logging.info('Cannot connect to HBase')
 
 if __name__ == '__main__':
     sched.configure()
+    logging.info('Started speed application.')
+    create_speed_table()
     sched.start()
